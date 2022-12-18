@@ -1,28 +1,49 @@
-# Create T3 App
+# Description
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Basic app consuming the Twitter API feed to show feeds of popular Twitter dev users. Implemented rate limiting based on IP.
 
-## What's next? How do I make an app with this?
+## Getting Started
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Running the app locally is pretty simple.
+First, clone the repo
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+```bash
+git clone https://github.com/azvaliev/dwitter.git
+```
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+See requirements and steps below
 
-## Learn More
+### Requirements
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Twitter API Bearer Token - [Here's a guide if you don't have one](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens)
+- [NodeJS v16+](https://nodejs.org)
+- [pnpm](https://pnpm.io) - technically optional, but that is what the lockfile is based on
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Environment
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Create a `.env` in the root directory, and add the following
 
-## How do I deploy this?
+- Add your Twitter API Bearer token under the name `TWITTER_BEARER_TOKEN`
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Install Dependencies
+
+```bash
+pnpm install
+```
+
+### Run the dev server
+
+```bash
+pnpm dev
+```
+
+It will be visible on [localhost:3000](http://localhost:3000)
+
+### Build and start Prod Server
+
+```bash
+pnpm build
+pnpm start
+```
+
+It will be visible on [localhost:3000](http://localhost:3000)
