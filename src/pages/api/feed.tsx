@@ -15,7 +15,12 @@ const expectedQuery = z.object({
   take: z.number({ coerce: true })
 });
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse<TweetRes>) {
+  if (req.method !== 'GET') {
+    res.status(405).end();
+    return;
+  }
+
   await applyRateLimit(req, res);
 
   const parseQueryResult = expectedQuery.safeParse(req.query);
