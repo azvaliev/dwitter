@@ -45,7 +45,7 @@ function UserFeed({ initialTweets, user }: FeedProps): JSX.Element {
             <Image
               src={user.profile_image_url.replace("_normal", "_400x400")}
               alt={user.name}
-              className="object-contain"
+              className="object-contain rounded-full"
               fill
              />
           </div>
@@ -56,11 +56,11 @@ function UserFeed({ initialTweets, user }: FeedProps): JSX.Element {
             key={tweet.id}
             className="flex flex-row whitespace-pre-wrap py-4 text-slate-100"
           >
-            <div className="relative min-h-[4rem] min-w-[4rem]">
+            <div className="relative min-h-[4rem] min-w-[4rem] max-h-[4rem] rounded-full">
               <Image
                 src={user.profile_image_url.replace("_normal", "_200x200")}
                 alt={user.name}
-                className="object-contain"
+                className="object-contain rounded-full"
                 fill
                />
             </div>
