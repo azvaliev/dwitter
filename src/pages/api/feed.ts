@@ -32,20 +32,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse<TweetRes>) {
   const { data: query } = parseQueryResult;
 
   try {
-    const tweets = await getTweets(query);
+    const tweets = await fetchTweets(query);
     res.status(200).json(tweets);
-  } catch {
+  } catch (err) {
+    console.error(err)
     res.status(502).end();
   }
 }
 
 export {
-  getTweets,
+  fetchTweets,
 }
 
 export default handler;
 
-async function getTweets({
+async function fetchTweets({
   userId,
   cursor,
   take

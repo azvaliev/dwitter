@@ -20,7 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<FetchUsersResul
 
   const { usernames } = expectedQuery.parse(req.query);
 
-  const users = await fetchUsers(usernames);
+  const users = await fetchUsersByUsernames(usernames);
   res.status(200).json(users);
 }
 
@@ -28,7 +28,7 @@ export default handler;
 
 type FetchUsersResult = Array<TwitterUser>;
 
-export async function fetchUsers(usernames = defaultUsers): Promise<FetchUsersResult> {
+export async function fetchUsersByUsernames(usernames = defaultUsers): Promise<FetchUsersResult> {
   const params = new URLSearchParams({
     usernames: usernames.join(','),
     ['user.fields']: 'profile_image_url',

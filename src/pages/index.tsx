@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import type { TwitterUser } from "src/server/user-types";
-import { fetchUsers } from "./api/users";
+import { fetchUsersByUsernames } from "./api/users";
 
 import styles from 'src/styles/index.module.scss'
 
@@ -19,7 +19,7 @@ function Home({ users }: HomePageProps): JSX.Element {
         <meta name="description" content="Simple Twitter feed UI of a single user" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
         <h1 className="text-4xl font-bold pb-2">
           Dwitter
         </h1>
@@ -56,7 +56,7 @@ function Home({ users }: HomePageProps): JSX.Element {
 export default Home;
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<HomePageProps>> {
-  const users = await fetchUsers();
+  const users = await fetchUsersByUsernames();
 
   return {
     props: {
