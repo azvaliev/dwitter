@@ -56,7 +56,7 @@ function UserFeed({ initialTweets, user }: FeedProps): JSX.Element {
             key={tweet.id}
             className="flex flex-row whitespace-pre-wrap py-4 text-slate-100"
           >
-            <div className="relative h-16 w-16">
+            <div className="relative min-h-[4rem] min-w-[4rem]">
               <Image
                 src={user.profile_image_url.replace("_normal", "_200x200")}
                 alt={user.name}
