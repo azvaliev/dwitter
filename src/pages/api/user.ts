@@ -48,6 +48,5 @@ export async function fetchUserById(id: string): Promise<ExpandedTwitterUser> {
   });
 
   const userResult = await userResponse.json();
-  console.log(userResult)
   return userResult.data;
 }

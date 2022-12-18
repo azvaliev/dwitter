@@ -1,11 +1,14 @@
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import Image from "next/image";
+import { useCallback } from "react";
+import FeedTweet from "src/components/tweet";
 import useFeed from "src/hooks/use-feed";
+import useIntersectionObserver from "src/hooks/use-intersection-observer";
 import type { TweetRes } from "src/server/tweet-types";
 import { fetchTweets } from "../api/feed";
 import { fetchUserById } from "../api/user";
 
-const NumFormatter = Intl.NumberFormat('en', { notation: 'compact' });
+export const NumFormatter = Intl.NumberFormat('en', { notation: 'compact' });
 
 type FeedProps = {
   initialTweets: TweetRes;
@@ -13,7 +16,16 @@ type FeedProps = {
 }
 
 function UserFeed({ initialTweets, user }: FeedProps): JSX.Element {
-  const { tweets } = useFeed(initialTweets);
+  const { tweets, setSize, isLoading } = useFeed(initialTweets);
+
+  const handleIntersection = useCallback(() => {
+    if (!isLoading) {
+      setSize((prevSize) => prevSize + 1) ;
+    }
+  }, [isLoading, setSize])
+
+  const intersectionRefTweetIdx = tweets.length - 7;
+  const intersectionRef = useIntersectionObserver<HTMLDivElement>(handleIntersection, intersectionRefTweetIdx);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#1c0142] to-[#15162c] text-white">
@@ -51,82 +63,13 @@ function UserFeed({ initialTweets, user }: FeedProps): JSX.Element {
           </div>
           </div>
         </aside>
-        {tweets.map((tweet) => (
-          <article
+        {tweets.map((tweet, idx) => (
+          <FeedTweet
             key={tweet.id}
-            className="flex flex-row whitespace-pre-wrap py-4 text-slate-100"
-          >
-            <div className="relative min-h-[4rem] min-w-[4rem] max-h-[4rem] rounded-full">
-              <Image
-                src={user.profile_image_url.replace("_normal", "_200x200")}
-                alt={user.name}
-                className="object-contain rounded-full"
-                fill
-               />
-            </div>
-            <div className="px-2">
-              <div className="flex flex-row items-center gap-2">
-                <h3 className="text-lg font-semibold">{user.name}</h3>
-                <h4 className="text-sm text-slate-400 font-medium">@{user.username}</h4>
-              </div>
-              <p className="font-light whitespace-pre-wrap">
-                {tweet.text}
-              </p>
-              <div className="flex flex-row gap-x-4 text-slate-400 pt-2 min-h-fit">
-                <div className="flex flex-row items-center gap-x-1">
-                  {NumFormatter.format(tweet.public_metrics.like_count)}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    ></path>
-                  </svg>
-                </div>
-                <div className="flex flex-row items-center gap-x-1">
-                  {NumFormatter.format(tweet.public_metrics.quote_count)}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="w-4 h-4"
-                  >
-                    <polyline points="9 10 4 15 9 20"></polyline>
-                    <path d="M20 4v7a4 4 0 0 1-4 4H4"></path>
-                  </svg>
-                </div>
-                <div className="flex flex-row items-center gap-x-1">
-                  {NumFormatter.format(tweet.public_metrics.retweet_count)}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="w-4 h-4"
-                  >
-                    <polyline points="17 1 21 5 17 9"></polyline>
-                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-                    <polyline points="7 23 3 19 7 15"></polyline>
-                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </article>
+            tweet={tweet}
+            user={user}
+            ref={idx === intersectionRefTweetIdx ? intersectionRef : undefined}
+          />
         ))}
       </div>
     </div>
